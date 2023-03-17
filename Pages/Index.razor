@@ -19,18 +19,30 @@
     </div>
     <div class="col-12">
         <p class="mt-1 alert alert-info" >@Message</p>
+        <p class="mt-1 alert alert-danger">@ResultMessage</p>
     </div>
 </div>
 
 @code{
     UsersFile usersFile = new();
     string Message = "No file selected";
+    string ResultMessage = "Last result: ";
 
     protected async Task DownloadFile()
     {
-        await AzureBlobStorageService.UploadFileAsync(usersFile);  
+        UsersFile temp = usersFile;
         usersFile = new();
         Message = "No file selected";
+
+        try
+        {
+            await AzureBlobStorageService.UploadFileAsync(temp);
+            ResultMessage += $"File {temp.FilePath} was upload!; ";
+        }
+        catch (Exception ex)
+        {
+            ResultMessage += $"An error occurred during file {temp.FilePath} upload: " + ex.Message;
+        }     
     }
 
     public void OnInputFileChange(InputFileChangeEventArgs e)
