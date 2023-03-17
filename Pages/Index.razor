@@ -1,0 +1,44 @@
+﻿@page "/"
+
+@inject AzureBlobStorageService AzureBlobStorageService
+
+<PageTitle>Test task</PageTitle>
+
+<h1>Test task Sahanenko Nadiia</h1>
+<div class="row">
+    <div class="col-6">        
+        <EditForm Model="usersFile" OnValidSubmit="DownloadFile">
+            <DataAnnotationsValidator/>
+            <label>Email:</label>
+            <InputText class="form-control mb-1" @bind-Value="usersFile.Email"/>
+            <ValidationMessage For="@(() => usersFile.Email)" />
+             <InputFile id="inputFile" class="form-control mb-1" OnChange="@OnInputFileChange" accept=".docx" />           
+            <ValidationMessage For="@(() => usersFile.FilePath)" />
+            <button class="btn btn-info">Download File</button>
+        </EditForm>
+    </div>
+    <div class="col-12">
+        <p class="mt-1 alert alert-info" >@Message</p>
+    </div>
+</div>
+
+@code{
+    UsersFile usersFile = new();
+    string Message = "No file selected";
+
+    protected async Task DownloadFile()
+    {
+        await AzureBlobStorageService.UploadFileAsync(usersFile);  
+        usersFile = new();
+        Message = "No file selected";
+    }
+
+    public void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        usersFile.FilePath = e.File.Name;
+        usersFile.FileObject = e.File;
+
+        Message = $"File {usersFile.FilePath} was selected"; 
+        this.StateHasChanged();
+    }     
+}
