@@ -21,7 +21,7 @@ namespace TestFileUpload.Services
 
             var metadata = new Dictionary<string, string>
             {
-                { "email", usersFile.Email! }
+                { "email", usersFile.Email!.Trim() }
             };
 
             using (var fileStream = usersFile.FileObject.OpenReadStream())

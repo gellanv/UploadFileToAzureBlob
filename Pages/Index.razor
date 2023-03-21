@@ -7,14 +7,14 @@
 <h1>Test task Sahanenko Nadiia</h1>
 <div class="row">
     <div class="col-6">        
-        <EditForm Model="usersFile" OnValidSubmit="DownloadFile">
+        <EditForm Model="usersFile" OnValidSubmit="UploadFile">
             <DataAnnotationsValidator/>
             <label>Email:</label>
             <InputText class="form-control mb-1" @bind-Value="usersFile.Email"/>
             <ValidationMessage For="@(() => usersFile.Email)" />
              <InputFile id="inputFile" class="form-control mb-1" OnChange="@OnInputFileChange" accept=".docx" />           
             <ValidationMessage For="@(() => usersFile.FilePath)" />
-            <button class="btn btn-info">Download File</button>
+            <button class="btn btn-info">Upload File</button>
         </EditForm>
     </div>
     <div class="col-12">
@@ -28,7 +28,7 @@
     string Message = "No file selected";
     string ResultMessage = "Last result: ";
 
-    protected async Task DownloadFile()
+    protected async Task UploadFile()
     {
         UsersFile temp = usersFile;
         usersFile = new();
